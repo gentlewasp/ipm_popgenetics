@@ -3,7 +3,7 @@
 #biocLite("qvalue")
 #install.packages("dartR")
 
-library("poppr")
+library(poppr)
 library(vcfR)
 library(RColorBrewer)
 library(ggplot2)
