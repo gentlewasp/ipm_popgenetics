@@ -22,6 +22,7 @@ oldgenepop=   "px_ddRAD_2018_432_5074_all_4X_0.999_thin_genepop.txt"
 
 setwd(output_dir)
 removepop.genepop="removePOP.gen"
+removepop_ind.genepop="removepop_ind.genepop.gen"
 plinkpath="/Users/macbook2017/Desktop/softwares/plink_mac_20190304"
 pgdspiderpath="/Users/macbook2017/Desktop/softwares/PGDSpider_2.1.1.5"
 genepop_ID(genepop=oldgenepop, path=paste0(output_dir, oldgenepop)) ##change genepop individual name to detect pop nane
@@ -34,11 +35,12 @@ genepop_ID(genepop=oldgenepop, path=paste0(output_dir, oldgenepop)) ##change gen
 #metadata <- genepop_detective(oldgenepop,variable="All")
 #Alleles <- genepop_detective(oldgenepop,variable="Allele")
 
-##set population to be removed
+## set population to be removed
 PopNames <- genepop_detective(oldgenepop, variable="Pops") # check original population
 PopNames
 PopKeep <- c("HNHK", "GDGZ", "YNKM", "SCLS", "CQCQ", "SCYA", "SCNC", "SCCD", "SCGY") # to be kept populations
 #PopKeep <- setdiff(PopNames, c("CCC","GGG")) # to be remvoed populations
+## set loci to be removed
 #LociNames <- genepop_detective(removepop.genepop, variable="Loci")
 #subloci <- setdiff(LociNames,c("691:6:+"	,	"1114:19:+"	,	"2456:7:-" , "2774:5:+"	,	"3216:7:-" , "3342:6:-"	, "4138:7:-" , "4327:9:-"	,	"4674:7:-" , "5184:8:+"	,	"5875:5:-" , "6079:5:-"	, "6210:6:-" , "6834:5:+"	,	"6996:6:-" , "7281:9:-"	,	"7453:7:-" , "7846:6:+"	, "8844:20:-"	,	"9061:29:+"	,	"9202:118:+" , "9385:39:-" , "9988:5:-"	,	"11167:7:-"	, "12628:266:+", "12742:73:+"	,	"13157:5:-"	,	"13341:6:+"	,	"13579:7:-"	,	"16112:14:+" , "16279:5:+"	,	"16591:13:-" , "17762:5:-" , "18171:10:+"	,	"18316:16:-" , "18966:6:-" , "19158:101:+", "20683:8:-" , "21647:11:-"	,	"21895:28:+" , "22478:11:+"	,	"22685:5:-"	, "23396:6:+"	,	"25047:6:-"	,	"25429:15:+" , "25506:280:+",	"26940:78:+" , "27253:5:-" , "28157:7:+"	,	"28626:18:+" , "29342:6:-" , "29874:5:-" , "30035:11:+"	,	"30776:7:+"	, "31891:10:+" , "32432:10:-"	,	"32561:11:+" , "32763:5:-" , "32946:7:-" , "33097:11:-"	, "33445:30:-" , "34028:9:-" , "34325:5:+" , "34835:41:-"	,	"35111:15:+" , "35281:10:-"	, "36231:5:+"	,	"36487:5:-"	,	"37945:14:+" , "38432:5:+" , "38793:6:+" , "39139:9:+" , "40232:5:-"	,	"42708:132:+", "42876:7:-"))
 #remove populations
@@ -47,10 +49,19 @@ subset_genepop(genepop= oldgenepop, keep = TRUE,
                #subs = subloci,
                path = paste0(output_dir,removepop.genepop))  
 
+## set individuals to be removed, and remove individuals
+#SampleIDs <- genepop_detective(removepop.genepop, variable="Inds")
+#SampleIDs
+subid <- c("GXNN_02","GXNN_09","GXNN_05","GDSZ_13","GDGZ_13","HNHK_13","HNHK_13","GDGC_13","GDGB_14", "YNYX_14", "GXNY_14", "YNDH_14")
+subset_genepop_individual(genepop= removepop.genepop, 
+                          indiv = subid, 
+                          keep = FALSE,  
+                          path = paste0(output_dir,removepop_ind.genepop))
+
 ##read in removed populations genepop file
-genindData <- read.genepop(removepop.genepop, ncode=3)
+genindData <- read.genepop(removepop_ind.genepop, ncode=3)
 ##set population to geneind file
-SampleIDs <- genepop_detective(removepop.genepop, variable="Inds")
+SampleIDs <- genepop_detective(removepop_ind.genepop, variable="Inds")
 SampleIDs
 SamplePop <- str_replace_all(SampleIDs, "_", "")
 SamplePop <- str_replace_all(SamplePop, "0", "")
@@ -78,7 +89,7 @@ cluster <- find.clusters(genlight, n.clust=NULL,
                          #truenames=TRUE,
                          scale=FALSE,
                          parallel=TRUE)
-PC=120                #number of principle componetskept, for dapc analysis
+PC=100                #number of principle componetskept, for dapc analysis
 numberofcluster = 2   #number of clusters kept, for dapc analysis
 
 #####DAPC#####
