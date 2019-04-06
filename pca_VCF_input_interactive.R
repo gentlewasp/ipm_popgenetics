@@ -6,12 +6,19 @@
 # snp_pca.R vcf_file output_file_name popupations_file[optional]
 
 ##用于创建可以在网页浏览器里动态查看的pca，输入文件为vcf文件。
+#install.packages("devtools")
+#library(devtools)
+#install_github("nspope/r2vcftools")
 
+#library(r2vcftools)
 library("SNPRelate")
 library("plotly")
 library(htmlwidgets)
 library(htmltools)
+#library("LEA")
 
+output_dir <- "/Users/macbook2017/Desktop/dapc/" 
+setwd(output_dir)
 args <- "px_ddRAD_2018_432_5074_all_4X_0.999_thin.vcf"
 
 # Get arguments
@@ -25,6 +32,8 @@ snpgdsVCF2GDS(vcf_file, "temp.gds", method="biallelic.only")
 # Open GDS file
 genofile <- snpgdsOpen("temp.gds")
 
+distance <- snpgdsIBS(genofile)
+snpgdsHCluster(distance)
 # Run PCA
 pca <- snpgdsPCA(genofile, num.thread=1, autosome.only=F)
 
