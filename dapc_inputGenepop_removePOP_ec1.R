@@ -38,7 +38,7 @@ genepop_ID(genepop=oldgenepop, path=paste0(output_dir, oldgenepop)) ##change gen
 ## set population to be removed
 PopNames <- genepop_detective(oldgenepop, variable="Pops") # check original population
 PopNames
-PopKeep <- c("GDGZ", "HNHK", "QHXN", "SCDY", "SCLS","YNLJ", "YNYX") # to be kept populations
+PopKeep <- c("GDGZ", "HNHK", "YNLJ", "YNYX") # to be kept populations
 #PopKeep <- setdiff(PopNames, c("CCC","GGG")) # to be remvoed populations
 ## set loci to be removed
 #LociNames <- genepop_detective(removePOP.gen, variable="Loci")
@@ -52,11 +52,8 @@ subset_genepop(genepop= oldgenepop, keep = TRUE,
 ## set individuals to be removed, and remove individuals
 #SampleIDs <- genepop_detective(removePOP.gen, variable="Inds")
 #SampleIDs
-subid <- c("GXNN_02","GXNN_09","GXNN_05","GDSZ_13","GDGZ_13","HNHK_13","HNHK_13","GDGC_13","GDGB_14", "YNYX_14", "GXNY_14", "YNDH_14")
-subset_genepop_individual(genepop= removePOP.gen, 
-                          indiv = subid, 
-                          keep = FALSE,  
-                          path = paste0(output_dir,removePOP_IND.gen))
+#subid <- c("GXNN_02","GXNN_09","GXNN_05","GDSZ_13","GDGZ_13","HNHK_13","HNHK_13","GDGC_13","GDGB_14", "YNYX_14", "GXNY_14", "YNDH_14")
+#subset_genepop_individual(genepop= removePOP.gen,indiv = subid, keep = FALSE,path = paste0(output_dir,removePOP_IND.gen))
 removePOP_IND.gen="removePOP.gen"
 ##read in removed populations genepop file
 genindData <- read.genepop(removePOP_IND.gen, ncode=3)
@@ -76,6 +73,10 @@ SamplePop <- str_replace_all(SamplePop, "8", "")
 SamplePop <- str_replace_all(SamplePop, "9", "")
 SamplePop
 pop(genindData) <- SamplePop
+
+PopNames.used <- genepop_detective(removePOP_IND.gen, variable="Pops") # check original population
+PopNames.used
+
 ##convert genind to genlight format
 genlight <- gi2gl(genindData)
 toRemove <- is.na(glMean(genlight, alleleAsUnit = T))
@@ -83,13 +84,13 @@ genlight <- genlight[, !toRemove]
 
 #####  find optimal number of cluster #####
 cluster <- find.clusters(genlight, n.clust=NULL,                                                                        
-                         max.n.clust=100,                                                                                      
-                         stat=c("BIC"),                                                                                       
+                         max.n.clust=30,                                                                                      
+                         stat=c("AIC"),                                                                                       
                          n.iter=1e9, n.start=1e3, # 1e9, 1e3                                                                  
                          #truenames=TRUE,
                          scale=FALSE,
                          parallel=TRUE)
-PC=91                #number of principle componetskept, for dapc analysis
+PC=60                #number of principle componetskept, for dapc analysis
 numberofcluster = 2   #number of clusters kept, for dapc analysis
 
 #####DAPC#####
@@ -97,14 +98,16 @@ dapc <- dapc(genlight, n.da=numberofcluster, n.pca=PC)
 
 pdf(file="dapc.assignscatter_pca50.pdf")                                                                                      
 scatter(dapc,cstar=0,                                                                                                   
-        mstree=TRUE,                                                                                                          
-        posi.da="bottomright", posi.pca="bottomleft", scree.pca=TRUE,                                                         
-        scree.da=FALSE,                                                                                                       
+        #mstree=TRUE,                                                                                                          
+        #posi.da= "bottomleft", 
+        posi.pca = "topleft", scree.pca=TRUE,                                                         
+        scree.da=FALSE,                                                                                                      
         pch=20,                                                                                                               
         leg=TRUE,                                                                                                             
         col=seasun(14),                                                                                                       
         clab=0.8, # population names in the circle                                                                              
         ratio.pca=0.3, solid=.6, cex=3)                                                                                       
+
 dev.off() 
 
 set.seed(4)
@@ -131,13 +134,12 @@ mycol= rainbow(numberofcluster)
 pdf(file="compoplot.cluters.pdf")
 compoplot(dapc,posi="bottomright",
           txt.leg=paste("Cluster", 1:numberofcluster),
-          ncol=2,  col=mycol, xlab="individuals", 
+          col=mycol, xlab="individuals", 
           lab=FALSE)
 dev.off()
-
 
 pdf(file="dapc.cluster.table.pdf")                                                                                            
 table.value(table(pop(genlight), cluster$grp), 
             col.lab=paste("Cluster", 1:numberofcluster),
-            row.lab=c("HNHK", "GDGZ", "HNCS", "JXNC", "SCLS", "CQCQ", "SCYA", "SCNC", "SCCD", "SCGY", "HBXG", "HBWH", "AHHF", "BJYQ", "HBZJ")) 
+            row.lab=PopNames.used) 
 dev.off()
