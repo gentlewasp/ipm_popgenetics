@@ -1,5 +1,5 @@
 ################################################################################
-######### This is a script for drawing the sample site distribution map ########
+######### This is a script for drawing the sample site distribution map, writtern by Yi Chen ########
 ################################################################################
 
 ### install packages below if required
