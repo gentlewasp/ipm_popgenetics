@@ -38,7 +38,7 @@ genepop_ID(genepop=oldgenepop, path=paste0(output_dir, oldgenepop)) ##change gen
 ## set population to be removed
 PopNames <- genepop_detective(oldgenepop, variable="Pops") # check original population
 PopNames
-PopKeep <- c("BJFS") # to be kept populations
+PopKeep <- c("HNHK") # to be kept populations
 #PopKeep <- setdiff(PopNames, c("CCC","GGG")) # to be remvoed populations
 ## set loci to be removed
 #LociNames <- genepop_detective(removePOP.gen, variable="Loci")
@@ -82,7 +82,7 @@ genlight <- gi2gl(genindData)
 toRemove <- is.na(glMean(genlight, alleleAsUnit = T))
 genlight <- genlight[, !toRemove]
 
-glpca <- glPca(genlight)
+glpca <- glPca(genlight,parallel = TRUE, n.cores = 7L)
 scatter(glpca,posi="bottomright")
 glPlot(genlight,posi="bottomleft")
 
