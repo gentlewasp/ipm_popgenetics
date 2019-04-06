@@ -130,13 +130,15 @@ mycol= rainbow(numberofcluster)
 pdf(file="compoplot.cluters.pdf")
 compoplot(dapc,posi="bottomright",
           txt.leg=paste("Cluster", 1:numberofcluster),
-          ncol=2,  col=mycol, xlab="individuals", 
+          ncol=numberofcluster,  col=mycol, xlab="individuals", 
           lab=FALSE)
 dev.off()
 
+PopNames.used <- genepop_detective(removePOP_IND.gen, variable="Pops") # check original population
+PopNames.used
 
 pdf(file="dapc.cluster.table.pdf")                                                                                            
 table.value(table(pop(genlight), cluster$grp), 
             col.lab=paste("Cluster", 1:numberofcluster),
-            row.lab=c("HNHK", "GDGZ", "HNCS", "JXNC", "SCLS", "CQCQ", "SCYA", "SCNC", "SCCD", "SCGY", "HBXG", "HBWH", "AHHF", "BJYQ", "HBZJ")) 
+            row.lab=PopNames.used) 
 dev.off()
