@@ -38,7 +38,7 @@ genepop_ID(genepop=oldgenepop, path=paste0(output_dir, oldgenepop)) ##change gen
 ## set population to be removed
 PopNames <- genepop_detective(oldgenepop, variable="Pops") # check original population
 PopNames
-PopKeep <- c("GDGZ", "HNHK", "YNLJ", "YNYX") # to be kept populations
+PopKeep <- c("BJFS") # to be kept populations
 #PopKeep <- setdiff(PopNames, c("CCC","GGG")) # to be remvoed populations
 ## set loci to be removed
 #LociNames <- genepop_detective(removePOP.gen, variable="Loci")
@@ -81,6 +81,10 @@ PopNames.used
 genlight <- gi2gl(genindData)
 toRemove <- is.na(glMean(genlight, alleleAsUnit = T))
 genlight <- genlight[, !toRemove]
+
+glpca <- glPca(genlight)
+scatter(glpca,posi="bottomright")
+glPlot(genlight,posi="bottomleft")
 
 #####  find optimal number of cluster #####
 cluster <- find.clusters(genlight, n.clust=NULL,                                                                        
