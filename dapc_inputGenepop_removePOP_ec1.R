@@ -84,12 +84,12 @@ genlight <- genlight[, !toRemove]
 #####  find optimal number of cluster #####
 cluster <- find.clusters(genlight, n.clust=NULL,                                                                        
                          max.n.clust=100,                                                                                      
-                         stat=c("AIC"),                                                                                       
+                         stat=c("BIC"),                                                                                       
                          n.iter=1e9, n.start=1e3, # 1e9, 1e3                                                                  
                          #truenames=TRUE,
                          scale=FALSE,
                          parallel=TRUE)
-PC=110                #number of principle componetskept, for dapc analysis
+PC=91                #number of principle componetskept, for dapc analysis
 numberofcluster = 2   #number of clusters kept, for dapc analysis
 
 #####DAPC#####
@@ -124,7 +124,7 @@ pramx[-1]
 
 scatter(dapc, col=seasun(14), cex = 2, legend = TRUE,
         clabel = FALSE, posi.leg = "bottomleft", scree.pca = TRUE,
-        posi.pca = "topleft", cleg = 0.75, xax = 1, yax = 2, inset.solid = 1,leg=TRUE,)
+        posi.pca = "topleft", cleg = 0.75, xax = 1, yax = 2, inset.solid = 1)
 
 
 mycol= rainbow(numberofcluster)
