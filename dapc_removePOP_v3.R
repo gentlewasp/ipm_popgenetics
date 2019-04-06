@@ -18,7 +18,7 @@ library(stringr)
 
 ##define file names, software paths
 output_dir <- "/Users/macbook2017/Desktop/dapc/" 
-oldgenepop=   "px_ddRAD_2017_289_2943_all_4X_0.999_thin_genepop.txt"
+oldgenepop=   "px_ddRAD_2018_432_5074_all_4X_0.999_thin_genepop.txt"
 
 setwd(output_dir)
 removepop.genepop="removePOP.gen"
