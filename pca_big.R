@@ -4,7 +4,7 @@
 #First argument (required): input VCF file
 #Output: a PDF file with the figure, suffix: _pca.pdf 
 
-## args = input.vcf.file
+## args = input.vcf.file    
 args = commandArgs(trailingOnly=TRUE)
 
 if (length(args)==0) {

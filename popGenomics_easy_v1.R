@@ -23,12 +23,12 @@ library(ape)
 #### define file names, software paths ####
 #############################################################################################
 work_dir <- "/Users/macbook2017/Desktop/dapc/" 
-all.gen  = "px_ddRAD_2011_184_728_all_4X_0.999_thin_genepop.txt"
+setwd(work_dir)
+all.gen  = "px_ddRAD_2017_289_2943_all_4X_0.999_thin_genepop.txt"
 #############################################################################################
 
-setwd(work_dir)
-plinkpath="/Users/macbook2017/Desktop/softwares/plink_mac_20190304"
-pgdspiderpath="/Users/macbook2017/Desktop/softwares/PGDSpider_2.1.1.5"
+#plinkpath="/Users/macbook2017/Desktop/softwares/plink_mac_20190304"
+#pgdspiderpath="/Users/macbook2017/Desktop/softwares/PGDSpider_2.1.1.5"
 all.renamed.gen="all.renamed.gen"
 #all.vcf <- read.vcfR("ec.ddrad.mac2.thin1000.7109snps.287samples.recode.vcf") ##import all populations vcf
 #removePOP.gen="removePOP.gen"
@@ -36,7 +36,7 @@ all.renamed.gen="all.renamed.gen"
 
 #############################################################################################
 #### data manipulation, reformat genepop individual names to get population names automatically ####
-genepop_ID(genepop=all.gen, path=paste0(work_dir, all.renamed.gen)) 
+genepop_ID(genepop=all.gen, path=paste0(work_dir, all.renamed.gen))  ##BJYQ01 > BJYQ_01
 
 ##get variable from genepop using genepop_detective
 PopNames.all <- genepop_detective(all.renamed.gen, variable="Pops")
@@ -65,12 +65,12 @@ pop(all.genind) <- SamplePop
 PopNames.all
 pop.sublist <- "ALL" #c("CQCQ", "GDGZ", "HNHK", "SCDY", "SCLS", "SXTY", "YNLJ", "YNYX") #  
 pop.sublistname <- paste(pop.sublist, collapse ="_")
-subset.genind = paste(pop.sublistname, ".genind", sep = "")
+subset.genind = paste(pop.sublistname, ".genind", sep = "") 
 subset.genind <- popsub(all.genind, sublist = pop.sublist) # sublist=1:10, sublist=1:10, blacklist="Bazadais", sublist=c(1:6, 11:15)
 
 #############################################################################################
 #### set the final used data in subsequent analysis ####
-used.genind = all.genind
+used.genind = subset.genind
 #############################################################################################
 
 ## set color for figures and population names used
@@ -79,11 +79,10 @@ PopNames.used <- popNames(used.genind)
 cols <- rainbow(nPop(used.genind))
 ##convert genind to genlight format
 used.genlight <- gi2gl(used.genind)
-toRemove <- is.na(glMean(used.genlight, alleleAsUnit = T))
-used.genlight <- used.genlight[, !toRemove]
+#toRemove <- is.na(glMean(used.genlight, alleleAsUnit = T))
+#used.genlight <- used.genlight[, !toRemove]
 
 #### remove population, individual, loci using radiator pacakge ####
-#library("radiator")
 ## set population to be removed
 #PopNames.all <- genepop_detective(all.renamed.gen, variable="Pops") # check original population
 #PopNames.all
@@ -98,6 +97,7 @@ used.genlight <- used.genlight[, !toRemove]
 ## set individuals to be removed, and remove individuals
 #SampleIDs <- genepop_detective(removePOP.gen, variable="Inds")
 #SampleIDs
+####removed individuals from genepop file
 #subid <- c("GXNN_02","GXNN_09","GXNN_05","GDSZ_13","GDGZ_13","HNHK_13","HNHK_13","GDGC_13","GDGB_14", "YNYX_14", "GXNY_14", "YNDH_14")
 #subset_genepop_individual(genepop= removePOP.gen,indiv = subid, keep = FALSE,path = paste0(work_dir,removePOP_IND.gen))
 
@@ -190,8 +190,8 @@ title(ylab="Percent of variance\nexplained", line = 2)
 title(xlab="Eigenvalues", line = 1)
 dev.off()
 
-pdf(file=paste(pop.sublistname, ".pca.genlight.scatter.pdf", sep=""))
-scatter(glpca,posi="bottomright")
+pdf(file=paste(pop.sublistname, ".pca.genlight.scatter2.pdf", sep=""))
+scatter(glpca,posi="bottomleft")
 dev.off()
 
 glpca.scores <- as.data.frame(glpca$scores)
@@ -250,8 +250,8 @@ cluster <- find.clusters(used.genlight, n.clust=NULL,
                          parallel=TRUE)
 #dev.off()
 
-PC=2                #number of principle componetskept, for dapc analysis
-numberofcluster = 4   #number of clusters kept, for dapc analysis
+PC=250                #number of principle componetskept, for dapc analysis
+numberofcluster = 2   #number of clusters kept, for dapc analysis
 
 #####DAPC##### remember to input two values above.
 dapc <- dapc(used.genlight, n.da=numberofcluster, n.pca=PC)
@@ -270,7 +270,9 @@ scatter(dapc,cstar=0,
 dev.off() 
 
 set.seed(4)
+pdf(file=paste(pop.sublistname, ".dapc.snp.contribution.pdf", sep=""))
 contrib <- loadingplot(dapc$var.contr, axis = 2, thres = 0.07, lab.jitter = 1)
+dev.off()
 
 ##corss-valiation
 set.seed(999)
