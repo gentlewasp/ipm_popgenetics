@@ -17,12 +17,13 @@ library("genepopedit")
 library(stringr)
 library(hierfstat)
 library(pegas)
+library(ape)
 
 #############################################################################################
 #### define file names, software paths ####
 #############################################################################################
 work_dir <- "/Users/macbook2017/Desktop/dapc/" 
-all.gen  = "ec.mac2.thin1000.7109.287.gen"
+all.gen  = "px_ddRAD_2011_184_728_all_4X_0.999_thin_genepop.txt"
 #############################################################################################
 
 setwd(work_dir)
@@ -72,6 +73,10 @@ subset.genind <- popsub(all.genind, sublist = pop.sublist) # sublist=1:10, subli
 used.genind = all.genind
 #############################################################################################
 
+## set color for figures and population names used
+#cols <- brewer.pal(n = nPop(used.genind), name = "Dark2")  ## maximum is 8, if more than 8 populatins, changed it manually
+PopNames.used <- popNames(used.genind)
+cols <- rainbow(nPop(used.genind))
 ##convert genind to genlight format
 used.genlight <- gi2gl(used.genind)
 toRemove <- is.na(glMean(used.genlight, alleleAsUnit = T))
@@ -211,12 +216,9 @@ glPlot(used.genlight,posi="bottomleft")
 dev.off()
 
 ##phylogenetic tree
-library(ape)
 tree <- aboot(used.genlight, tree = "upgma", distance = bitwise.dist, sample = 100, showtree = F, cutoff = 50, quiet = T) # nj
-
 pdf(file=paste(pop.sublistname, ".indiv.phyloTree.upgma.pdf", sep=""))
-cols <- brewer.pal(n = nPop(used.genind), name = "Dark2")  ## maximum is 8, if more than 8 populatins, changed it manually
-plot.phylo(tree, type ="unrooted", cex = 0.8, font = 2, adj = 0, tip.color =  cols[pop(used.genlight)])
+plot.phylo(tree,  cex = 0.8, font = 2, adj = 0, tip.color =  cols[pop(used.genlight)]) # type ="unrooted",
 nodelabels(tree$node.label, adj = c(1.3, -0.5), frame = "n", cex = 0.6, font = 3, xpd = TRUE)
 #legend(35,10,PopNames.used,cols, border = FALSE, bty = "n")
 legend('topleft', legend =PopNames.used, fill = cols, border = FALSE, bty = "n", cex = 1)
@@ -234,21 +236,24 @@ vertex.attributes(msn$graph)$size <- node.size
 
 set.seed(9)
 pdf(file=paste(pop.sublistname, ".minimum.spanning.network.pdf", sep=""))
-plot_poppr_msn(used.genlight, msn , palette = brewer.pal(n = nPop(used.genlight), name = "Dark2"), gadj = 70)
+plot_poppr_msn(used.genlight, msn , palette = rainbow(nPop(used.genlight)), gadj = 70)
 dev.off()
 
 #####  find optimal number of cluster #####
+#pdf(file=paste(pop.sublistname, ".dapc.findClusters.pdf", sep=""))
 cluster <- find.clusters(used.genlight, n.clust=NULL,                                                                        
                          max.n.clust=30,                                                                                      
-                         stat=c("AIC"),                                                                                       
+                         stat=c("BIC"),                                                                                       
                          n.iter=1e9, n.start=1e3, # 1e9, 1e3                                                                  
                          #truenames=TRUE,
                          scale=FALSE,
                          parallel=TRUE)
+#dev.off()
+
 PC=2                #number of principle componetskept, for dapc analysis
 numberofcluster = 4   #number of clusters kept, for dapc analysis
 
-#####DAPC#####
+#####DAPC##### remember to input two values above.
 dapc <- dapc(used.genlight, n.da=numberofcluster, n.pca=PC)
 
 pdf(file=paste(pop.sublistname, ".dapc.assignscatter.pdf", sep=""))
@@ -307,7 +312,6 @@ barplot(t(dapc$posterior), col = cols, las = 3, space = 0, border = NA, cex.name
 dev.off()
 
 pdf(file=paste(pop.sublistname, ".dapc.cluster.table.pdf", sep=""))
-PopNames.used <- popNames(used.genind)
 table.value(table(pop(used.genlight), cluster$grp), 
             col.lab=paste("Cluster", 1:numberofcluster),
             row.lab=PopNames.used) 
