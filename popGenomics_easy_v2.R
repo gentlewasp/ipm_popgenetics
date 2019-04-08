@@ -23,12 +23,9 @@ library(ape)
 #### define file names, software paths ####
 #############################################################################################
 work_dir <- "/Users/macbook2017/Desktop/dapc/" 
-<<<<<<< HEAD
 setwd(work_dir)
 all.gen  = "px_ddRAD_2017_289_2943_all_4X_0.999_thin_genepop.txt"
-=======
 all.gen  = "px_ddRAD_2011_184_728_all_4X_0.999_thin_genepop.txt"
->>>>>>> 2a1cddef6edf32010e62d254f5bc96aa210e3785
 #############################################################################################
 
 #plinkpath="/Users/macbook2017/Desktop/softwares/plink_mac_20190304"
