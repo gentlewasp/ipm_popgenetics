@@ -23,8 +23,12 @@ library(ape)
 #### define file names, software paths ####
 #############################################################################################
 work_dir <- "/Users/macbook2017/Desktop/dapc/" 
+<<<<<<< HEAD
 setwd(work_dir)
 all.gen  = "px_ddRAD_2017_289_2943_all_4X_0.999_thin_genepop.txt"
+=======
+all.gen  = "px_ddRAD_2011_184_728_all_4X_0.999_thin_genepop.txt"
+>>>>>>> 2a1cddef6edf32010e62d254f5bc96aa210e3785
 #############################################################################################
 
 #plinkpath="/Users/macbook2017/Desktop/softwares/plink_mac_20190304"
@@ -250,8 +254,13 @@ cluster <- find.clusters(used.genlight, n.clust=NULL,
                          parallel=TRUE)
 #dev.off()
 
+<<<<<<< HEAD
 PC=250                #number of principle componetskept, for dapc analysis
 numberofcluster = 2   #number of clusters kept, for dapc analysis
+=======
+PC=2                #number of principle componetskept, for dapc analysis
+numberofcluster = 4   #number of clusters kept, for dapc analysis
+>>>>>>> 2a1cddef6edf32010e62d254f5bc96aa210e3785
 
 #####DAPC##### remember to input two values above.
 dapc <- dapc(used.genlight, n.da=numberofcluster, n.pca=PC)

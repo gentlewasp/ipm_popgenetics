@@ -22,10 +22,9 @@ library(ape)
 #############################################################################################
 #### define file names, software paths ####
 #############################################################################################
-work_dir <- "/Users/macbook2017/Desktop/dapc/" 
+work_dir <- "/Users/macbook2017/Desktop/dapc/ps/" 
 setwd(work_dir)
-all.gen  = "px_ddRAD_2017_289_2943_all_4X_0.999_thin_genepop.txt"
-all.gen  = "px_ddRAD_2011_184_728_all_4X_0.999_thin_genepop.txt"
+all.gen  = "ps.11pop.neutral.17517.gen.txt"
 #############################################################################################
 
 #plinkpath="/Users/macbook2017/Desktop/softwares/plink_mac_20190304"
@@ -72,14 +71,14 @@ subset.genind <- popsub(all.genind, sublist = pop.sublist) # sublist=1:10, subli
 #############################################################################################
 #### set the final used data in subsequent analysis ####
 used.genind = subset.genind
+##convert genind to genlight format
+used.genlight <- gi2gl(used.genind)
 #############################################################################################
 
 ## set color for figures and population names used
 #cols <- brewer.pal(n = nPop(used.genind), name = "Dark2")  ## maximum is 8, if more than 8 populatins, changed it manually
 PopNames.used <- popNames(used.genind)
 cols <- rainbow(nPop(used.genind))
-##convert genind to genlight format
-used.genlight <- gi2gl(used.genind)
 #toRemove <- is.na(glMean(used.genlight, alleleAsUnit = T))
 #used.genlight <- used.genlight[, !toRemove]
 
