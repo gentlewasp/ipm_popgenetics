@@ -40,9 +40,11 @@ for (i in 1:9) {
 pop(all.genind) <- SamplePop
 ##subset populations for use from genind file##
 PopNames.all
- 
+cols <- rainbow(nPop(all.genind))
+count <- 1
+
 for (i in PopNames.all) {
-  pop.sublist <- "CQCQ" #c("CQCQ", "GDGZ", "HNHK", "SCDY", "SCLS", "SXTY", "YNLJ", "YNYX") #
+  pop.sublist <- i #c("CQCQ", "GDGZ", "HNHK", "SCDY", "SCLS", "SXTY", "YNLJ", "YNYX") #
   pop.sublistname <- paste(species, pop.sublist, collapse ="_", sep=".")
   subset.genind <- popsub(all.genind, sublist = pop.sublist) # sublist=1:10, sublist=1:10, blacklist="Bazadais", sublist=c(1:6, 11:15)
   pop.sublistname
@@ -56,7 +58,8 @@ for (i in PopNames.all) {
 
 ## set color for figures and population names used
   PopNames.used <- popNames(used.genind)
-  cols <- rainbow(nPop(used.genind))
+  col <- cols[count]
+  count <- count + 1
 #toRemove <- is.na(glMean(used.genlight, alleleAsUnit = T))
 #used.genlight <- used.genlight[, !toRemove]
 
@@ -79,7 +82,7 @@ for (i in PopNames.all) {
   p <- ggplot(glpca.scores, aes(x=PC1, y=PC2, colour=pop, label=ind_id))  ##add x, y
   p <- p + geom_point(size=1) ##add dot
   p <- p + stat_ellipse(level = 0.95, size = 0.4) ## add circle
-  p <- p + scale_color_manual(values = cols) 
+  p <- p + scale_color_manual(values = col) 
   p <- p + geom_hline(yintercept = 0) 
   p <- p + geom_vline(xintercept = 0) 
   p <- p + theme_bw() + geom_text(size=3)
