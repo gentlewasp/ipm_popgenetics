@@ -86,16 +86,18 @@ for (i in PopNames.all) {
 
   glpca.scores <- as.data.frame(glpca$scores)
   glpca.scores$pop <- pop(used.genlight)
+  glpca.scores$ind_id <- indNames(used.genind)
+  #glpca.eig <- as.data.frame(glpca$eig)
   set.seed(9)
 
   pdf(file=paste(pop.sublistname, ".pca.genlight.scatter.ggplot.pdf", sep=""))
-  p <- ggplot(glpca.scores, aes(x=PC1, y=PC2, colour=pop))  ##add x, y
-  p <- p + geom_point(size=2) ##add dot
+  p <- ggplot(glpca.scores, aes(x=PC1, y=PC2, colour=pop, label=ind_id))  ##add x, y
+  p <- p + geom_point(size=1) ##add dot
   p <- p + stat_ellipse(level = 0.95, size = 0.4) ## add circle
   p <- p + scale_color_manual(values = cols) 
   p <- p + geom_hline(yintercept = 0) 
   p <- p + geom_vline(xintercept = 0) 
-  p <- p + theme_bw()
+  p <- p + theme_bw() + geom_text(size=3)
   print(p)
   dev.off()
 }
