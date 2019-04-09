@@ -14,7 +14,7 @@ work_dir <- "~/Desktop/dapc/"
 setwd(work_dir)
 all.gen  = "ec.mac2.thin1000.7109.287.gen"
 all.renamed.gen="all.renamed.gen"
-
+species="ec"
 #############################################################################################
 #### data manipulation, reformat genepop individual names to get population names automatically ####
 genepop_ID(genepop=all.gen, path=paste0(work_dir, all.renamed.gen))  ##BJYQ01 > BJYQ_01
@@ -42,8 +42,8 @@ pop(all.genind) <- SamplePop
 PopNames.all
  
 for (i in PopNames.all) {
-  pop.sublist <- i #c("CQCQ", "GDGZ", "HNHK", "SCDY", "SCLS", "SXTY", "YNLJ", "YNYX") #
-  pop.sublistname <- paste(pop.sublist, collapse ="_")
+  pop.sublist <- "CQCQ" #c("CQCQ", "GDGZ", "HNHK", "SCDY", "SCLS", "SXTY", "YNLJ", "YNYX") #
+  pop.sublistname <- paste(species, pop.sublist, collapse ="_", sep=".")
   subset.genind <- popsub(all.genind, sublist = pop.sublist) # sublist=1:10, sublist=1:10, blacklist="Bazadais", sublist=c(1:6, 11:15)
   pop.sublistname
 
