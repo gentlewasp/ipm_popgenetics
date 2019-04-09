@@ -249,14 +249,8 @@ cluster <- find.clusters(used.genlight, n.clust=NULL,
                          scale=FALSE,
                          parallel=TRUE)
 #dev.off()
-
-<<<<<<< HEAD
 PC=250                #number of principle componetskept, for dapc analysis
 numberofcluster = 2   #number of clusters kept, for dapc analysis
-=======
-PC=2                #number of principle componetskept, for dapc analysis
-numberofcluster = 4   #number of clusters kept, for dapc analysis
->>>>>>> 2a1cddef6edf32010e62d254f5bc96aa210e3785
 
 #####DAPC##### remember to input two values above.
 dapc <- dapc(used.genlight, n.da=numberofcluster, n.pca=PC)
