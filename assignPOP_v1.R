@@ -28,8 +28,8 @@ for (i in PopNames.all) {
   all_ref <- read.Genepop(paste(pop.sublistname, ".gen", sep=""), pop.names=used.PopNames)
   #all_inc <- read.Genepop( "nokin_allq9_inc.txt")
   #all_ref_rd <- reduce.allele(all_ref, p = 0.95)
-  assign_trial = assign.MC(all_ref, train.inds=c(0.9), train.loci=c(0.8), 
-                         loci.sample="fst", iterations=5, dir = paste(species, pop.sublistname, ".mc_svm/", sep=""), model="svm" )   
+  assign_trial = assign.MC(all_ref, train.inds=c(0.92), train.loci=c(0.8), 
+                         loci.sample="fst", iterations=200, dir = paste(species, pop.sublistname, ".mc_svm/", sep=""), model="svm" )   
   accuMC200 <- accuracy.MC(dir = paste(species, pop.sublistname, ".mc_svm/", sep=""))
   pdf(file=paste(species, pop.sublistname, ".assignpop.mc.plot.pdf", sep=""))
   accuracy.plot(accuMC200, pop = used.PopNames) 
