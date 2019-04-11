@@ -29,8 +29,8 @@ for (a in PopNames.all) {
   #all_inc <- read.Genepop( "nokin_allq9_inc.txt")
   #all_ref_rd <- reduce.allele(all_ref, p = 0.95)
   assign_trial = assign.MC(all_ref, train.inds=c(0.92), train.loci=c(0.8), 
-                         loci.sample="fst", iterations=200, dir = paste(species, pop.sublistname, ".mc_svm/", sep=""), model="svm" )   
-  accuMC <- accuracy.MC(dir = paste(species, pop.sublistname, ".mc_svm/", sep=""))
+                         loci.sample="fst", iterations=200, dir = paste(species, pop.sublistname, "mc_svm/", sep="."), model="svm" )   
+  accuMC <- accuracy.MC(dir = paste(species, pop.sublistname, "mc_svm/", sep="."))
   pdf(file=paste(species, pop.sublistname, "assignpop.mc.plot.pdf", sep="."))
   plot.result <- accuracy.plot(accuMC, pop = c("all", used.PopNames))
   print(plot.result)
