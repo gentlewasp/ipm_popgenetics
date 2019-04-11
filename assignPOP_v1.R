@@ -7,9 +7,9 @@ library(genepopedit)
 
 work_dir <- "/Users/macbook2017/Desktop/dapc/" 
 setwd(work_dir)
-all.gen  = "ec.287.mac2.thin500.7172.gen.txt"
+all.gen  = "ec.287.2.500.6347.remove.outliers.gen.txt"
 all.renamed.gen="all.renamed.gen"
-species = "ec.test"
+species = "ec"
 genepop_ID(genepop=all.gen, path=paste0(work_dir, all.renamed.gen)) 
 PopNames.all <- genepop_detective(all.renamed.gen, variable="Pops")
 PopCounts.all <- genepop_detective(all.renamed.gen, variable="PopNum")
